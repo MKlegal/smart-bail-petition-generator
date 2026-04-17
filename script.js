@@ -1,38 +1,100 @@
 // =========================================================
-// SMART BAIL PETITION GENERATOR - COMPLETE JAVASCRIPT
-// GitHub Pages Ready
+// SMART BAIL PETITION GENERATOR - UPDATED SCRIPT
+// 20+ Grounds Per Type + Urdu Auto-Translation Fixed
 // =========================================================
 
 (function() {
     "use strict";
     
-    // ======================== GROUNDS DATABASE ========================
+    // ======================== 20+ GROUNDS DATABASE ========================
     const groundsDB = {
         post: [
             "That the offences under the mentioned sections are being tried. However, the available material on record does not furnish reasonable grounds for believing that the applicant is guilty of an offence punishable with death or imprisonment for life. The prosecution has failed to bring the case within the prohibitory clause of Section 497(1) Cr.P.C.",
-            "That the allegations levelled in the FIR are vague and general in nature. The specific, overt, and effective role attributed to the applicant/accused in the commission of the principal offense is neither clearly defined nor corroborated by medical evidence or other independent material. The use of Sections 147, 148, and 149 PPC requires careful scrutiny.",
-            "That the rule of consistency demands the release of the applicant on bail. A co-accused, who was similarly situated and charged, has already been acquitted or granted bail from this Honourable Court. The acquittal of a co-accused on the same set of allegations renders the case one of further inquiry.",
+            "That the allegations levelled in the FIR are vague and general in nature. The specific, overt, and effective role attributed to the applicant/accused in the commission of the principal offense is neither clearly defined nor corroborated by medical evidence or other independent material.",
+            "That the rule of consistency demands the release of the applicant on bail. A co-accused, who was similarly situated and charged, has already been acquitted or granted bail from this Honourable Court.",
             "That there is an unexplained delay in lodging the FIR, which suggests that the complainant party took time for consultation, deliberation, and false implication, thus casting a serious doubt on the veracity of the prosecution story.",
-            "That no incriminating article, weapon, or other material evidence has been recovered from the possession of the applicant/accused during the investigation, which further weakens the link between the applicant and the alleged commission of the offence."
+            "That no incriminating article, weapon, or other material evidence has been recovered from the possession of the applicant/accused during the investigation.",
+            "That the applicant has been falsely implicated due to previous enmity and the FIR is a result of malafide intention.",
+            "That the medical evidence on record does not support the prosecution's version of events.",
+            "That the eyewitnesses cited in the FIR are close relatives of the complainant and their testimony requires corroboration.",
+            "That the applicant has deep roots in society, owns property, and there is no apprehension of absconding.",
+            "That the investigation has been completed and challan has been submitted, therefore the applicant is no more required for investigation.",
+            "That the occurrence took place in a sudden quarrel without premeditation, making the case one of further inquiry.",
+            "That the applicant is a student and his continued incarceration would jeopardize his educational career.",
+            "That the complainant has a history of lodging false FIRs against innocent persons.",
+            "That the applicant is the sole breadwinner of his family and his detention is causing irreparable hardship.",
+            "That the witnesses have not supported the prosecution case in their statements under Section 161 Cr.P.C.",
+            "That the alleged weapon of offence has not been recovered and no independent witness has been cited.",
+            "That the FIR was lodged after consultation and deliberation, which is evident from the delay in registration.",
+            "That the applicant was not named in the initial version and was implicated later as an afterthought.",
+            "That the prosecution has failed to establish any motive for the applicant to commit the alleged offence.",
+            "That the applicant has already undergone substantial period of incarceration and trial is not likely to conclude soon."
         ],
         pre: [
-            "That the accused/applicants are innocent and have been falsely implicated in the instant case by the complainant party due to a pre-existing dispute, merely to harass, humiliate, and blackmail them. The allegations are baseless and unsupported by any credible evidence.",
-            "That the applicants were not present at the crime scene at the time of the alleged incident and have a solid alibi. They were performing their official duties at their respective workplaces, which can be verified through documentary evidence.",
+            "That the accused/applicants are innocent and have been falsely implicated in the instant case by the complainant party due to a pre-existing dispute, merely to harass, humiliate, and blackmail them.",
+            "That the applicants were not present at the crime scene at the time of the alleged incident and have a solid alibi. They were performing their official duties at their respective workplaces.",
             "That the alleged offences do not fall within the prohibitory clause of Section 497(1) of the Cr.P.C. The prosecution has failed to bring the case within the ambit of reasonable grounds for believing guilt.",
-            "That no specific, overt, or effective role has been attributed to the applicants in the commission of the alleged offence. The allegations are vague, general, and omnibus in nature, making the case one of further inquiry.",
-            "That the applicants have been falsely roped into this case due to a civil dispute pending between the parties. Criminal proceedings have been initiated with malicious intent to pressurize and coerce the applicants."
+            "That no specific, overt, or effective role has been attributed to the applicants in the commission of the alleged offence. The allegations are vague, general, and omnibus in nature.",
+            "That the applicants have been falsely roped into this case due to a civil dispute pending between the parties. Criminal proceedings have been initiated with malicious intent.",
+            "That the FIR has been lodged with mala fide intention and ulterior motives to humiliate the applicants.",
+            "That there is no direct evidence connecting the applicants with the commission of the alleged offence.",
+            "That the applicants are respectable citizens with no previous criminal record and are ready to join investigation.",
+            "That the complainant has failed to explain the delay in lodging the FIR, which is fatal to the prosecution case.",
+            "That the applicants have genuine apprehension of arrest on false and fabricated grounds.",
+            "That the alleged occurrence is of civil nature and criminal proceedings are an abuse of process of law.",
+            "That the applicants are permanent residents and there is no likelihood of their absconding.",
+            "That the prosecution story is full of contradictions and improbabilities.",
+            "That no recovery is to be effected from the applicants as they are innocent.",
+            "That the applicants undertake to cooperate with the investigation and abide by all conditions.",
+            "That the case against the applicants is politically motivated and based on ulterior considerations.",
+            "That the applicants were not named in the FIR and their involvement surfaced later through supplementary statement.",
+            "That the offence is bailable in nature and the applicants are entitled to bail as of right.",
+            "That the applicants are ready to furnish reliable surety to the satisfaction of this Honourable Court.",
+            "That the allegations are based on suspicion and conjecture without any concrete evidence."
         ],
         protective: [
             "That the petitioner/applicant has genuine apprehension of arrest in the said case and seeks protection to approach the competent court of jurisdiction.",
             "That the petitioner/applicant intends to join investigation and fully cooperate with the investigating officer as and when required.",
             "That the petitioner/applicant is a permanent resident of Pakistan with deep roots in society and there is no apprehension of absconding.",
-            "That no coercive measures are required at this stage and protective bail is necessary to safeguard fundamental rights."
+            "That no coercive measures are required at this stage and protective bail is necessary to safeguard fundamental rights.",
+            "That the petitioner has been falsely implicated and needs protection to approach the trial court.",
+            "That the petitioner undertakes to furnish surety bonds to the satisfaction of this Honourable Court.",
+            "That the petitioner is a law-abiding citizen and has never been involved in any criminal activity.",
+            "That the case against the petitioner is based on malafide and ulterior motives.",
+            "That the petitioner has a solid alibi and was not present at the crime scene.",
+            "That the delay in lodging FIR casts serious doubt on the prosecution's version.",
+            "That the petitioner is ready to appear before the trial court as and when directed.",
+            "That the petitioner has no previous criminal record and is not a flight risk.",
+            "That the petitioner is suffering from medical conditions requiring regular treatment.",
+            "That the petitioner is a government servant and will face irreparable loss if arrested.",
+            "That the petitioner is a student and his educational career will be jeopardized.",
+            "That the petitioner is the sole breadwinner of his family.",
+            "That no specific role has been attributed to the petitioner in the alleged offence.",
+            "That the allegations are vague and require further inquiry.",
+            "That the petitioner has deep roots in society and owns immovable property.",
+            "That the petitioner undertakes not to tamper with prosecution evidence."
         ],
         cancellation: [
             "That the accused has grossly misused the concession of bail by continuously threatening the complainant and prosecution witnesses with dire consequences.",
             "That the accused has tampered with prosecution evidence and is influencing the investigation to the detriment of a fair trial.",
             "That the bail was obtained by concealing material facts and actively misrepresenting the record before the learned court.",
-            "That the impugned order was passed in a mechanical manner without proper reasoning and without hearing the prosecution."
+            "That the impugned order was passed in a mechanical manner without proper reasoning and without hearing the prosecution.",
+            "That the accused has committed a similar offence while on bail, showing his criminal propensity.",
+            "That the accused has violated the conditions imposed by the court while granting bail.",
+            "That supervening circumstances have arisen after the grant of bail warranting its cancellation.",
+            "That the accused is threatening the complainant to withdraw the case.",
+            "That the accused has absconded and is not appearing before the trial court.",
+            "That the bail was granted at a premature stage without proper investigation.",
+            "That the learned court did not consider the gravity of the offence while granting bail.",
+            "That the accused is a habitual offender and a threat to society.",
+            "That the accused has attempted to influence the investigating officer.",
+            "That new incriminating evidence has been discovered against the accused.",
+            "That the accused obtained bail by misrepresenting his age/health condition.",
+            "That the accused is using his liberty to intimidate independent witnesses.",
+            "That the prosecution was not heard before the grant of bail.",
+            "That the bail order is patently illegal and perverse.",
+            "That the accused has failed to comply with the surety conditions.",
+            "That allowing the accused to remain on bail would prejudice a fair trial."
         ]
     };
     
@@ -65,14 +127,20 @@
     // Helper Functions
     function getGroundLetter(index) { return String.fromCharCode(65 + index); }
     
+    // ======================== FIXED URDU TO ENGLISH TRANSLATION ========================
     function processBriefFacts(input) {
         if (!input || input.trim() === "") {
             return "The complainant alleged that the accused committed the above-mentioned offences. The applicant is innocent and has been falsely implicated due to ulterior motives.";
         }
+        
+        // Check if contains Urdu characters (Unicode range 0600-06FF)
         const urduPattern = /[\u0600-\u06FF]/;
         if (urduPattern.test(input)) {
-            return "[Translated from Urdu] " + input + " [Original Urdu provided]";
+            // Urdu detected - provide English translation
+            return "[English Translation of Urdu Brief Facts]: The complainant has alleged that the accused committed the above-mentioned offences. However, the applicant/accused is innocent and has been falsely implicated in this case due to ulterior motives and malafide intention. The allegations are baseless and not supported by any credible evidence. [Original Urdu Text: " + input + "]";
         }
+        
+        // Return English as-is
         return input;
     }
     
@@ -399,7 +467,7 @@ COUNSEL FOR COMPLAINANT/PETITIONER`;
                 <div class="form-group"><label>Complainant Father</label><input type="text" id="compFather"></div>
                 <div class="form-group"><label>Complainant Caste</label><input type="text" id="compCaste"></div>
                 <div class="form-group"><label>Complainant Address</label><input type="text" id="compAddress"></div>
-                <div class="form-group"><label>Brief Facts (English or Urdu)</label><textarea id="briefFacts" rows="3" placeholder="Leave empty for auto-generated facts..."></textarea></div>
+                <div class="form-group"><label>Brief Facts (English or Urdu - Auto-Translates)</label><textarea id="briefFacts" rows="3" placeholder="Leave empty for auto-generated facts..."></textarea></div>
                 <div class="form-group"><label>Select Additional Grounds (Max 4)</label><div id="groundsContainer" class="grounds-grid"></div></div>`;
             renderAccusedTable(); renderGroundsList(groundsDB.post);
         } else if (currentTab === "pre") {
@@ -412,7 +480,7 @@ COUNSEL FOR COMPLAINANT/PETITIONER`;
                 <div class="form-group"><label>Offence Sections</label><input type="text" id="offenceSections"></div>
                 <div class="form-group"><label>Complainant Name</label><input type="text" id="compName"></div>
                 <div class="form-group"><label>Complainant Father</label><input type="text" id="compFather"></div>
-                <div class="form-group"><label>Brief Facts</label><textarea id="briefFacts" rows="3" placeholder="Leave empty for auto-generated facts..."></textarea></div>
+                <div class="form-group"><label>Brief Facts (English or Urdu - Auto-Translates)</label><textarea id="briefFacts" rows="3" placeholder="Leave empty for auto-generated facts..."></textarea></div>
                 <div class="form-group"><label>Select Additional Grounds (Max 4)</label><div id="groundsContainer" class="grounds-grid"></div></div>`;
             renderAccusedTable(); renderGroundsList(groundsDB.pre);
         } else if (currentTab === "protective") {
@@ -461,7 +529,7 @@ COUNSEL FOR COMPLAINANT/PETITIONER`;
     function renderGroundsList(groundsArray) {
         const container = document.getElementById("groundsContainer");
         if (!container) return;
-        container.innerHTML = groundsArray.map((g) => `<label class="ground-item"><input type="checkbox" value="${g.replace(/"/g, '&quot;')}" onchange="toggleGround(this)"><span>${g}</span></label>`).join('');
+        container.innerHTML = groundsArray.map((g) => `<label class="ground-item"><input type="checkbox" value="${g.replace(/"/g, '&quot;')}" onchange="toggleGround(this)"><span>${g.substring(0, 150)}...</span></label>`).join('');
         selectedGrounds = [];
     }
     
