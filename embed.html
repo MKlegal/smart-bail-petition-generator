@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Bail Generator - Embed</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FileSaver.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: transparent !important;
+            color: #E2E8F0;
+            line-height: 1.5;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sbg-embed-wrapper {
+            background: transparent;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Tabs */
+        .sbg-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .sbg-tab-btn {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #94A3B8;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .sbg-tab-btn:hover {
+            border-color: #D4AF37;
+            color: #D4AF37;
+        }
+        .sbg-tab-btn.active {
+            background: linear-gradient(135deg, #D4AF37, #b8941f);
+            color: #0A0F1C;
+            border-color: transparent;
+        }
+        
+        /* Form Panel */
+        .sbg-form-panel {
+            background: rgba(17, 24, 39, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .sbg-form-group {
+            margin-bottom: 18px;
+        }
+        .sbg-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #D4AF37;
+            font-size: 0.8rem;
+        }
+        .sbg-form-group input,
+        .sbg-form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(10, 15, 28, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 10px;
+            color: #E2E8F0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+        }
+        .sbg-form-group input:focus,
+        .sbg-form-group textarea:focus {
+            outline: none;
+            border-color: #D4AF37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+        }
+        
+        /* Accused Table */
+        .sbg-accused-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+        }
+        .sbg-accused-table th,
+        .sbg-accused-table td {
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 6px;
+        }
+        .sbg-accused-table th {
+            background: rgba(212, 175, 55, 0.1);
+            color: #D4AF37;
+        }
+        .sbg-accused-table input {
+            width: 100%;
+            padding: 5px;
+            background: rgba(10, 15, 28, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 5px;
+            color: #E2E8F0;
+        }
+        
+        .sbg-btn-add {
+            background: transparent;
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            padding: 6px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+        .sbg-btn-add:hover {
+            background: #D4AF37;
+            color: #0A0F1C;
+        }
+        
+        /* Grounds Grid */
+        .sbg-grounds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+        .sbg-ground-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px 10px;
+            background: rgba(10, 15, 28, 0.5);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        .sbg-ground-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        .sbg-ground-item input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #D4AF37;
+            margin-top: 2px;
+        }
+        
+        /* Preview Panel */
+        .sbg-preview-panel {
+            background: rgba(17, 24, 39, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+        }
+        
+        .sbg-preview-content {
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            font-family: 'Times New Roman', Times, serif;
+            color: #1a1a2e;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+        }
+        
+        /* Buttons */
+        .sbg-btn-generate {
+            background: linear-gradient(135deg, #D4AF37, #b8941f);
+            border: none;
+            color: #0A0F1C;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            font-family: 'Cinzel', serif;
+        }
+        
+        .sbg-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .sbg-btn-outline {
+            background: transparent;
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .sbg-btn-outline:hover {
+            background: #D4AF37;
+            color: #0A0F1C;
+        }
+        .sbg-btn-download {
+            background: #25D366;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        /* Mobile */
+        @media (max-width: 600px) {
+            .sbg-tabs { justify-content: center; }
+            .sbg-tab-btn { padding: 10px 14px; font-size: 0.75rem; }
+            .sbg-grounds-grid { grid-template-columns: 1fr; }
+            .sbg-action-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sbg-embed-wrapper">
+        <!-- Tabs -->
+        <div class="sbg-tabs" id="sbgTabs">
+            <button class="sbg-tab-btn active" data-tab="post">📄 497 CrPC (Post-Arrest)</button>
+            <button class="sbg-tab-btn" data-tab="pre">🛡️ 498 CrPC (Pre-Arrest)</button>
+            <button class="sbg-tab-btn" data-tab="protective">✈️ Protective Bail</button>
+            <button class="sbg-tab-btn" data-tab="cancellation">❌ Cancellation</button>
+        </div>
+        
+        <!-- Form Panel -->
+        <div class="sbg-form-panel" id="sbgFormPanel"></div>
+        
+        <!-- Preview Panel -->
+        <div class="sbg-preview-panel">
+            <div id="sbgLivePreview" class="sbg-preview-content">Select petition type and fill details...</div>
+            <div class="sbg-action-buttons">
+                <button class="sbg-btn-outline" id="sbgCopyBtn">📋 Copy</button>
+                <button class="sbg-btn-download" id="sbgDownloadBtn">⬇️ Download .doc</button>
+            </div>
+            <button class="sbg-btn-generate" id="sbgGenerateBtn">✨ Generate & Refresh</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+            
+            // Complete Grounds Database
+            const groundsDB = {
+                post: [
+                    "That the offences under the mentioned sections are being tried. However, the available material on record does not furnish reasonable grounds for believing that the applicant is guilty of an offence punishable with death or imprisonment for life.",
+                    "That the allegations levelled in the FIR are vague and general in nature. The specific role attributed to the applicant is neither clearly defined nor corroborated.",
+                    "That the rule of consistency demands the release of the applicant on bail. A co-accused with similar role has already been acquitted or granted bail.",
+                    "That there is an unexplained delay in lodging the FIR, casting serious doubt on the veracity of the prosecution story.",
+                    "That no incriminating article has been recovered from the possession of the applicant during investigation.",
+                    "That the applicant has been falsely implicated due to previous enmity.",
+                    "That the medical evidence does not support the prosecution's version.",
+                    "That the applicant has deep roots in society and will not abscond."
+                ],
+                pre: [
+                    "That the accused/applicants are innocent and have been falsely implicated due to a pre-existing dispute.",
+                    "That the applicants were not present at the crime scene and have a solid alibi.",
+                    "That the alleged offences do not fall within the prohibitory clause of Section 497(1) Cr.P.C.",
+                    "That no specific role has been attributed to the applicants. The allegations are vague and omnibus.",
+                    "That the applicants have been falsely roped into this case due to a civil dispute.",
+                    "That the FIR was lodged with mala fide intention.",
+                    "That there is no direct evidence connecting the applicants.",
+                    "That the applicants are respectable citizens with clean record."
+                ],
+                protective: [
+                    "That the petitioner has genuine apprehension of arrest and seeks protection.",
+                    "That the petitioner intends to join investigation and fully cooperate.",
+                    "That the petitioner is a permanent resident with deep roots in society.",
+                    "That no coercive measures are required at this stage."
+                ],
+                cancellation: [
+                    "That the accused has grossly misused the concession of bail by threatening witnesses.",
+                    "That the accused has tampered with prosecution evidence.",
+                    "That the bail was obtained by concealing material facts.",
+                    "That the impugned order was passed mechanically without proper reasoning.",
+                    "That the accused has committed a similar offence while on bail."
+                ]
+            };
+            
+            const postFixedStart = [
+                "That the applicant/accused is innocent and has been falsely and maliciously implicated in the instant case by the complainant party due to ulterior motives. The allegations are not supported by any credible material, and as such, the case is one of further inquiry under Section 497(2) Cr.P.C.",
+                "That the investigation has been completed and the accused/applicant has been shifted to {jailName} and is no more required for any investigation."
+            ];
+            
+            const postFixedEnd = [
+                "That the applicant is a respectable citizen with no previous criminal record. The applicant is ready to furnish reliable surety bonds.",
+                "That based on the above-stated facts, there are strong prima facie grounds to believe that the applicant is entitled to the grant of post-arrest bail."
+            ];
+            
+            const preFixedStart = [
+                "That the accused/applicants are innocent and have not committed any offence whatsoever.",
+                "There has been an inordinate and unexplained delay in the registration of the FIR, which casts serious doubt upon the prosecution's narrative."
+            ];
+            
+            const preFixedEnd = [
+                "That the applicants are prepared to furnish reliable surety and undertake to join investigation.",
+                "That based on the above, there are strong prima facie grounds to believe that the applicants are entitled to pre-arrest bail."
+            ];
+            
+            let currentTab = "post";
+            let accusedList = [{ name: "", father: "", caste: "", address: "" }];
+            let selectedGrounds = [];
+            
+            function getGroundLetter(index) { return String.fromCharCode(65 + index); }
+            
+            function processBriefFacts(input) {
+                if (!input || input.trim() === "") {
+                    return "The complainant alleged that the accused committed the above-mentioned offences. The applicant is innocent and has been falsely implicated due to ulterior motives.";
+                }
+                const urduPattern = /[\u0600-\u06FF]/;
+                if (urduPattern.test(input)) {
+                    return "[Translated from Urdu] " + input;
+                }
+                return input;
+            }
+            
+            function generatePostArrestBail() {
+                const court = document.getElementById("courtName")?.value || "DISTRICT & SESSIONS JUDGE MASTUNG";
+                const firNo = document.getElementById("firNo")?.value || "_____";
+                const firDate = document.getElementById("firDate")?.value || "_____";
+                const ps = document.getElementById("policeStation")?.value || "_____";
+                const offence = document.getElementById("offenceSections")?.value || "_____";
+                const compName = document.getElementById("compName")?.value || "_____";
+                const compFather = document.getElementById("compFather")?.value || "_____";
+                const compCaste = document.getElementById("compCaste")?.value || "_____";
+                const compAddress = document.getElementById("compAddress")?.value || "_____";
+                const jail = document.getElementById("jailName")?.value || "Central Jail Mastung";
+                const briefInput = document.getElementById("briefFacts")?.value || "";
+                const briefFacts = processBriefFacts(briefInput);
+                
+                let accusedText = accusedList.map(a => `${a.name || "_____"} S/o ${a.father || "_____"} By caste ${a.caste || "_____"} R/o ${a.address || "_____"}`).join("\n\n");
+                if (accusedList.length > 1) {
+                    accusedText = accusedList.map((a, i) => `${i+1}. ${a.name || "_____"} S/o ${a.father || "_____"}, caste ${a.caste || "_____"}, r/o ${a.address || "_____"}`).join("\n");
+                }
+                const accusedNamesOnly = accusedList.map(a => a.name || "_____").join(", ");
+                
+                let groundsArray = [...postFixedStart];
+                groundsArray[1] = groundsArray[1].replace("{jailName}", jail);
+                selectedGrounds.forEach(g => groundsArray.push(g));
+                groundsArray.push(...postFixedEnd);
+                
+                const groundsHtml = groundsArray.map((g, i) => `${getGroundLetter(i)}. ${g}`).join("\n\n");
+                
+                return `BEFORE THE COURT OF ${court.toUpperCase()}
+
+${accusedText}
+Now confined at ${jail}
+
+...                                                          …Accused/Applicant
+
+V E R S U S
+
+The State                                                                 Respondent
+
+OFFENCE U/S: ${offence}
+
+APPLICATION FOR GRANT OF POST-ARREST BAIL UNDER SECTION 497 Cr.P.C.
+
+The applicant/accused respectfully submits as under:
+
+1. Brief facts: FIR No: ${firNo} lodged at ${ps} on complaint of ${compName} S/o ${compFather} by caste ${compCaste} R/o ${compAddress}. ${briefFacts} (copy of FIR attached).
+
+2. The accused/applicant was arrested and is innocent. Hence seeks post-arrest bail on following grounds:
+
+G R O U N D S
+
+${groundsHtml}
+
+P R A Y E R
+
+It is prayed that the applicant/accused, ${accusedNamesOnly}, may be released on post-arrest bail.
+
+ACCUSED/APPLICANT
+THROUGH COUNSEL
+
+CERTIFICATE
+Certified that no such bail application is filed or pending.
+
+COUNSEL FOR ACCUSED/APPLICANT`;
+            }
+            
+            function generatePreArrestBail() {
+                const court = document.getElementById("courtName")?.value || "DISTRICT & SESSIONS JUDGE MASTUNG";
+                const firNo = document.getElementById("firNo")?.value || "_____";
+                const firDate = document.getElementById("firDate")?.value || "_____";
+                const ps = document.getElementById("policeStation")?.value || "_____";
+                const offence = document.getElementById("offenceSections")?.value || "_____";
+                const compName = document.getElementById("compName")?.value || "_____";
+                const compFather = document.getElementById("compFather")?.value || "_____";
+                const briefInput = document.getElementById("briefFacts")?.value || "";
+                const briefFacts = processBriefFacts(briefInput);
+                
+                let accusedText = accusedList.map((a, i) => `${i+1}. ${a.name || "_____"} S/o ${a.father || "_____"} By caste ${a.caste || "_____"} R/o ${a.address || "_____"}`).join("\n");
+                const accusedNamesOnly = accusedList.map(a => a.name || "_____").join(", ");
+                const affidavitNames = accusedList.map(a => `${a.name || "_____"} S/o ${a.father || "_____"}`).join(", ");
+                
+                let groundsArray = [...preFixedStart];
+                selectedGrounds.forEach(g => groundsArray.push(g));
+                groundsArray.push(...preFixedEnd);
+                
+                const groundsHtml = groundsArray.map((g, i) => `${getGroundLetter(i)}. ${g}`).join("\n\n");
+                
+                return `BEFORE THE COURT OF ${court.toUpperCase()}
+
+${accusedText}
+
+...                                                          …Accused/Applicants
+
+V E R S U S
+
+The State                                                                 Respondent
+
+OFFENCE U/S: ${offence}
+
+APPLICATION UNDER SECTION 498 Cr.P.C FOR GRANT OF PRE-ARREST BAIL
+
+1. Brief facts: On ${firDate}, FIR No ${firNo} lodged at ${ps} by ${compName} S/o ${compFather}. ${briefFacts}
+
+2. On this report FIR was lodged. The accused being innocent prefers pre-arrest bail on following grounds:
+
+G R O U N D S
+
+${groundsHtml}
+
+P R A Y E R
+
+It is prayed that pre-arrest bail may be granted to the applicants/accused.
+
+ACCUSED/APPLICANTS
+THROUGH COUNSEL
+
+AFFIDAVIT
+We, ${affidavitNames}, affirm contents are true.
+
+CERTIFICATE
+Certified no similar application pending.
+
+COUNSEL FOR ACCUSED/APPLICANTS`;
+            }
+            
+            function generateProtectiveBail() {
+                const court = document.getElementById("protectiveCourt")?.value || "HONOURABLE HIGH COURT OF BALOCHISTAN AT QUETTA";
+                const firNo = document.getElementById("protectiveFirNo")?.value || "_____";
+                const ps = document.getElementById("protectivePs")?.value || "_____";
+                const offence = document.getElementById("protectiveOffence")?.value || "_____";
+                const appName = document.getElementById("applicantName")?.value || "_____";
+                const appFather = document.getElementById("applicantFather")?.value || "_____";
+                const appCaste = document.getElementById("applicantCaste")?.value || "_____";
+                const appAddress = document.getElementById("applicantAddress")?.value || "_____";
+                
+                let groundsArray = [
+                    "That the petitioner is innocent and falsely implicated.",
+                    "That the petitioner has genuine apprehension of arrest."
+                ];
+                selectedGrounds.forEach(g => groundsArray.push(g));
+                groundsArray.push("That the petitioner is a permanent resident and will not abscond.");
+                groundsArray.push("That the petitioner undertakes to furnish surety bonds.");
+                
+                const groundsHtml = groundsArray.map((g, i) => `${getGroundLetter(i)}. ${g}`).join("\n\n");
+                
+                return `BEFORE THE ${court.toUpperCase()}
+
+${appName} S/o ${appFather}
+By caste ${appCaste} R/o ${appAddress}
+
+...                                                          …Petitioner/Applicant
+
+V E R S U S
+
+The State & another                                                       Respondents
+
+OFFENCE U/S: ${offence}
+
+APPLICATION FOR GRANT OF PROTECTIVE/TRANSITORY BAIL
+
+1. Brief facts: FIR No: ${firNo} lodged at ${ps}. Petitioner is innocent.
+
+2. Petitioner has genuine apprehension of arrest and seeks protective bail.
+
+G R O U N D S
+
+${groundsHtml}
+
+P R A Y E R
+
+Protective bail may be granted for 15 days to approach competent court.
+
+PETITIONER/APPLICANT
+THROUGH COUNSEL
+
+AFFIDAVIT
+I, ${appName} S/o ${appFather}, affirm contents are true.
+
+CERTIFICATE
+Certified no such application pending.
+
+COUNSEL FOR PETITIONER/APPLICANT`;
+            }
+            
+            function generateCancellationPetition() {
+                const court = document.getElementById("cancellationCourt")?.value || "DISTRICT & SESSIONS JUDGE, MASTUNG";
+                const firNo = document.getElementById("cancellationFirNo")?.value || "_____";
+                const ps = document.getElementById("cancellationPs")?.value || "_____";
+                const offence = document.getElementById("cancellationOffence")?.value || "_____";
+                const compName = document.getElementById("compName")?.value || "_____";
+                const compFather = document.getElementById("compFather")?.value || "_____";
+                const compCaste = document.getElementById("compCaste")?.value || "_____";
+                const compAddress = document.getElementById("compAddress")?.value || "_____";
+                const bailDate = document.getElementById("bailDate")?.value || "_____";
+                const bailCourt = document.getElementById("bailCourt")?.value || "_____";
+                
+                const accusedText = accusedList.map((a, i) => `${i+1}. ${a.name || "_____"} S/o ${a.father || "_____"} caste ${a.caste || "_____"}, r/o ${a.address || "_____"}`).join("\n");
+                const accusedNamesOnly = accusedList.map(a => a.name || "_____").join(", ");
+                
+                return `IN THE COURT OF THE ${court.toUpperCase()}
+
+Bail Cancellation No.______/${new Date().getFullYear()}
+
+${compName} s/o ${compFather},
+Caste ${compCaste}, Resident of ${compAddress}.
+                                                              Complainant/Petitioner:
+
+V E R S U S
+
+${accusedText}
+                                                              Accused/Respondent:
+
+The State                                                           Respondent.
+
+OFFENCE UNDER SECTION ${offence}
+
+APPLICATION U/S 497(5) Cr.P.C. FOR CANCELLATION OF BAIL DATED ${bailDate} PASSED BY ${bailCourt}.
+
+1. Brief facts: FIR No. ${firNo} registered at ${ps}. Accused granted bail on ${bailDate} by ${bailCourt}.
+
+2. Accused has misused bail by threatening witnesses and tampering with evidence.
+
+3. Bail was obtained by misrepresentation.
+
+P R A Y E R
+
+Cancel bail granted to accused ${accusedNamesOnly} and take into custody.
+
+APPLICANT/COMPLAINANT
+THROUGH COUNSEL
+
+AFFIDAVIT
+I, ${compName}, affirm contents are true.
+
+CERTIFICATE
+Certified no such application pending.
+
+COUNSEL FOR COMPLAINANT/PETITIONER`;
+            }
+            
+            function updatePreview() {
+                let content = "";
+                if (currentTab === "post") content = generatePostArrestBail();
+                else if (currentTab === "pre") content = generatePreArrestBail();
+                else if (currentTab === "protective") content = generateProtectiveBail();
+                else if (currentTab === "cancellation") content = generateCancellationPetition();
+                document.getElementById("sbgLivePreview").innerText = content;
+            }
+            
+            function renderForm() {
+                const panel = document.getElementById("sbgFormPanel");
+                if (currentTab === "post") {
+                    panel.innerHTML = `<div class="sbg-form-group"><label>Court Name</label><input type="text" id="courtName" value="DISTRICT & SESSIONS JUDGE MASTUNG"></div>
+                        <div class="sbg-form-group"><label>Accused Details</label><table class="sbg-accused-table"><thead><tr><th>Name</th><th>Father</th><th>Caste</th><th>Address</th><th></th></tr></thead><tbody id="sbgAccusedBody"></tbody></table><button type="button" class="sbg-btn-add" onclick="addAccusedRow()">+ Add Accused</button></div>
+                        <div class="sbg-form-group"><label>Jail Name</label><input type="text" id="jailName" value="Central Jail Mastung"></div>
+                        <div class="sbg-form-group"><label>FIR No.</label><input type="text" id="firNo" placeholder="e.g., 45/2026"></div>
+                        <div class="sbg-form-group"><label>FIR Date</label><input type="date" id="firDate"></div>
+                        <div class="sbg-form-group"><label>Police Station</label><input type="text" id="policeStation"></div>
+                        <div class="sbg-form-group"><label>Offence Sections</label><input type="text" id="offenceSections" placeholder="e.g., 302, 34 PPC"></div>
+                        <div class="sbg-form-group"><label>Complainant Name</label><input type="text" id="compName"></div>
+                        <div class="sbg-form-group"><label>Complainant Father</label><input type="text" id="compFather"></div>
+                        <div class="sbg-form-group"><label>Complainant Caste</label><input type="text" id="compCaste"></div>
+                        <div class="sbg-form-group"><label>Complainant Address</label><input type="text" id="compAddress"></div>
+                        <div class="sbg-form-group"><label>Brief Facts (English or Urdu)</label><textarea id="briefFacts" rows="3"></textarea></div>
+                        <div class="sbg-form-group"><label>Select Additional Grounds</label><div id="sbgGroundsContainer" class="sbg-grounds-grid"></div></div>`;
+                    renderAccusedTable(); renderGroundsList(groundsDB.post);
+                } else if (currentTab === "pre") {
+                    panel.innerHTML = `<div class="sbg-form-group"><label>Court Name</label><input type="text" id="courtName" value="DISTRICT & SESSIONS JUDGE MASTUNG"></div>
+                        <div class="sbg-form-group"><label>Accused Details</label><table class="sbg-accused-table"><thead><tr><th>Name</th><th>Father</th><th>Caste</th><th>Address</th><th></th></tr></thead><tbody id="sbgAccusedBody"></tbody></table><button type="button" class="sbg-btn-add" onclick="addAccusedRow()">+ Add Accused</button></div>
+                        <div class="sbg-form-group"><label>FIR No.</label><input type="text" id="firNo"></div>
+                        <div class="sbg-form-group"><label>FIR Date</label><input type="date" id="firDate"></div>
+                        <div class="sbg-form-group"><label>Police Station</label><input type="text" id="policeStation"></div>
+                        <div class="sbg-form-group"><label>Offence Sections</label><input type="text" id="offenceSections"></div>
+                        <div class="sbg-form-group"><label>Complainant Name</label><input type="text" id="compName"></div>
+                        <div class="sbg-form-group"><label>Complainant Father</label><input type="text" id="compFather"></div>
+                        <div class="sbg-form-group"><label>Brief Facts</label><textarea id="briefFacts" rows="3"></textarea></div>
+                        <div class="sbg-form-group"><label>Select Additional Grounds</label><div id="sbgGroundsContainer" class="sbg-grounds-grid"></div></div>`;
+                    renderAccusedTable(); renderGroundsList(groundsDB.pre);
+                } else if (currentTab === "protective") {
+                    panel.innerHTML = `<div class="sbg-form-group"><label>High Court Name</label><input type="text" id="protectiveCourt" value="HONOURABLE HIGH COURT OF BALOCHISTAN AT QUETTA"></div>
+                        <div class="sbg-form-group"><label>Applicant Name</label><input type="text" id="applicantName"></div>
+                        <div class="sbg-form-group"><label>Father Name</label><input type="text" id="applicantFather"></div>
+                        <div class="sbg-form-group"><label>Caste</label><input type="text" id="applicantCaste"></div>
+                        <div class="sbg-form-group"><label>Address</label><input type="text" id="applicantAddress"></div>
+                        <div class="sbg-form-group"><label>FIR No.</label><input type="text" id="protectiveFirNo"></div>
+                        <div class="sbg-form-group"><label>Police Station</label><input type="text" id="protectivePs"></div>
+                        <div class="sbg-form-group"><label>Offence Sections</label><input type="text" id="protectiveOffence"></div>
+                        <div class="sbg-form-group"><label>Select Grounds</label><div id="sbgGroundsContainer" class="sbg-grounds-grid"></div></div>`;
+                    renderGroundsList(groundsDB.protective);
+                } else if (currentTab === "cancellation") {
+                    panel.innerHTML = `<div class="sbg-form-group"><label>Court Name</label><input type="text" id="cancellationCourt" value="DISTRICT & SESSIONS JUDGE, MASTUNG"></div>
+                        <div class="sbg-form-group"><label>Complainant Name</label><input type="text" id="compName"></div>
+                        <div class="sbg-form-group"><label>Complainant Father</label><input type="text" id="compFather"></div>
+                        <div class="sbg-form-group"><label>Complainant Caste</label><input type="text" id="compCaste"></div>
+                        <div class="sbg-form-group"><label>Complainant Address</label><input type="text" id="compAddress"></div>
+                        <div class="sbg-form-group"><label>Accused Details</label><table class="sbg-accused-table"><thead><tr><th>Name</th><th>Father</th><th>Caste</th><th>Address</th><th></th></tr></thead><tbody id="sbgAccusedBody"></tbody></table><button type="button" class="sbg-btn-add" onclick="addAccusedRow()">+ Add Accused</button></div>
+                        <div class="sbg-form-group"><label>FIR No.</label><input type="text" id="cancellationFirNo"></div>
+                        <div class="sbg-form-group"><label>Police Station</label><input type="text" id="cancellationPs"></div>
+                        <div class="sbg-form-group"><label>Offence Sections</label><input type="text" id="cancellationOffence"></div>
+                        <div class="sbg-form-group"><label>Bail Granting Court</label><input type="text" id="bailCourt"></div>
+                        <div class="sbg-form-group"><label>Bail Order Date</label><input type="date" id="bailDate"></div>
+                        <div class="sbg-form-group"><label>Select Grounds</label><div id="sbgGroundsContainer" class="sbg-grounds-grid"></div></div>`;
+                    renderAccusedTable(); renderGroundsList(groundsDB.cancellation);
+                }
+                attachInputListeners();
+            }
+            
+            function renderAccusedTable() {
+                const tbody = document.getElementById("sbgAccusedBody");
+                if (!tbody) return;
+                tbody.innerHTML = accusedList.map((a, idx) => `<tr>
+                    <td><input type="text" value="${a.name}" onchange="updateAccused(${idx},'name',this.value)"></td>
+                    <td><input type="text" value="${a.father}" onchange="updateAccused(${idx},'father',this.value)"></td>
+                    <td><input type="text" value="${a.caste}" onchange="updateAccused(${idx},'caste',this.value)"></td>
+                    <td><input type="text" value="${a.address}" onchange="updateAccused(${idx},'address',this.value)"></td>
+                    <td><button onclick="removeAccusedRow(${idx})" style="background:transparent;border:none;color:#D4AF37;cursor:pointer;">❌</button></td>
+                </tr>`).join('');
+            }
+            
+            function renderGroundsList(groundsArray) {
+                const container = document.getElementById("sbgGroundsContainer");
+                if (!container) return;
+                container.innerHTML = groundsArray.map((g) => `<label class="sbg-ground-item"><input type="checkbox" value="${g.replace(/"/g, '&quot;')}" onchange="toggleGround(this)"><span>${g}</span></label>`).join('');
+                selectedGrounds = [];
+            }
+            
+            function toggleGround(cb) {
+                const maxGrounds = 4;
+                if (cb.checked) {
+                    if (selectedGrounds.length >= maxGrounds) { cb.checked = false; alert(`Maximum ${maxGrounds} grounds allowed.`); return; }
+                    selectedGrounds.push(cb.value);
+                } else {
+                    selectedGrounds = selectedGrounds.filter(g => g !== cb.value);
+                }
+                updatePreview();
+            }
+            
+            window.addAccusedRow = function() { 
+                accusedList.push({ name: "", father: "", caste: "", address: "" }); 
+                renderAccusedTable(); 
+                updatePreview(); 
+            };
+            window.removeAccusedRow = function(idx) { 
+                accusedList.splice(idx, 1); 
+                renderAccusedTable(); 
+                updatePreview(); 
+            };
+            window.updateAccused = function(idx, field, value) { 
+                if (accusedList[idx]) accusedList[idx][field] = value; 
+                updatePreview(); 
+            };
+            
+            function attachInputListeners() {
+                document.querySelectorAll("#sbgFormPanel input, #sbgFormPanel textarea").forEach(inp => inp.addEventListener("input", updatePreview));
+            }
+            
+            function copyDraft() {
+                navigator.clipboard.writeText(document.getElementById("sbgLivePreview").innerText).then(() => alert("Draft copied!"));
+            }
+            
+            function downloadWord() {
+                const content = document.getElementById("sbgLivePreview").innerText;
+                const blob = new Blob([content], { type: "application/msword" });
+                saveAs(blob, `bail-petition-${currentTab}.doc`);
+            }
+            
+            document.querySelectorAll(".sbg-tab-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    document.querySelectorAll(".sbg-tab-btn").forEach(b => b.classList.remove("active"));
+                    btn.classList.add("active");
+                    currentTab = btn.dataset.tab;
+                    accusedList = [{ name: "", father: "", caste: "", address: "" }];
+                    selectedGrounds = [];
+                    renderForm();
+                    updatePreview();
+                });
+            });
+            
+            document.getElementById("sbgCopyBtn")?.addEventListener("click", copyDraft);
+            document.getElementById("sbgDownloadBtn")?.addEventListener("click", downloadWord);
+            document.getElementById("sbgGenerateBtn")?.addEventListener("click", updatePreview);
+            
+            renderForm();
+            updatePreview();
+        })();
+    </script>
+</body>
+</html>
